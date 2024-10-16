@@ -6,8 +6,12 @@ function Registration() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    contact: "",
     password: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -18,13 +22,22 @@ function Registration() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Check if all required fields are filled
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.contact ||
+      !formData.password
+    ) {
+      setErrorMessage("Please fill out all fields.");
+      return;
+    }
+
     console.log(formData);
+    setErrorMessage("");
+    navigate("/home");
   };
-  const navigate = useNavigate();
-  function goBack() {
-    navigate("/"
-    );
-  }
 
   return (
     <div className="registration-container">
@@ -57,12 +70,14 @@ function Registration() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="ContactNumber">
-            <b>Contact-Number:</b>
+          <label htmlFor="contact">
+            <b>Contact Number:</b>
           </label>
           <input
-            type="Tell"
-            value={formData.Contact}
+            type="tel"
+            id="contact"
+            name="contact"
+            value={formData.contact}
             onChange={handleChange}
             required
           />
@@ -80,7 +95,8 @@ function Registration() {
             required
           />
         </div>
-        <button onClick={goBack} className="submit-btn">
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <button type="submit" className="submit-btn">
           <b>Register</b>
         </button>
       </form>

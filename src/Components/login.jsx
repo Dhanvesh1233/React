@@ -1,47 +1,57 @@
 import React, { useState } from "react";
-import { FaUser } from "react-icons/fa";
-import { FaLock } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
-
+import { FaUser, FaLock } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-  
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      setErrorMessage("Please enter both email and password.");
+      return;
+    }
+
+    // If validation passes, navigate to /home
     navigate("/home");
   };
 
- 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log(formData);
-  };
- 
-
   return (
     <div className="login">
-      <form action="">
+      <form onSubmit={handleLogin}>
         <h1>Login</h1>
         <div className="input-box">
-          <input type="text" placeholder="Username" required />
+          <input
+            type="text"
+            placeholder="Username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
           <FaUser className="icon" />
         </div>
         <div className="input-box">
-          <input type="password" placeholder="Password" required />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <FaLock className="icon" />
         </div>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <div className="remember-forgot">
           <label>
-            <input type="checkbox" />
-            Remember me{" "}
+            <input type="checkbox" /> Remember me
           </label>
           <a href="#">Forgot password?</a>
         </div>
-        <button onClick={handleLogin} >Login</button>
+        <button type="submit">Login</button>
         <div className="register-link">
           <p>
             Don't have an account? <a href="/registration">Register</a>
